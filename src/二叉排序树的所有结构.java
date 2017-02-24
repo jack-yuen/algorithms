@@ -22,7 +22,7 @@ Given an integer n, generate all structurally unique BST's (binary search trees)
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class 广度优先遍历的所有情况 {
+public class 二叉排序树的所有结构 {
     public static void main(String[] argv){
         List<TreeNode> s = generateTrees(4);
         System.out.println(3);
