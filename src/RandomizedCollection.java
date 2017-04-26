@@ -1,4 +1,7 @@
-public class O1时间插入删除和随机 {
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+public class RandomizedCollection {
     HashMap<String,List<String>> m_map;
     List<String> m_list;
 
