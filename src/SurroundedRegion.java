@@ -31,19 +31,60 @@ public class SurroundedRegion {
         List<Point> pts = new ArrayList<Point>();
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
-                if(mark[i][j] == true){
+                if(mark[i][j] == true || board[i][j] == 'X'){//visited
                     continue;
                 }
-                boolean margin = false;
-                if(board[i][j] == 'O'){
-                    if(findMargin(i, j, board, mark) == true){
-                        pts.add(new Point(i,j));
+                Stack<Integer> xs = new Stack();
+                Stack<Integer> ys = new Stack();
+                int minx = i;
+                int miny = j;
+                xs.push(i);//=false
+                ys.push(j);
+                mark[i][j] = true;
+                boolean tobefilled = true;
+                while(!xs.isEmpty()){
+                    int curx = xs.pop();
+                    int cury = ys.pop();
+                    if(curx == 0||curx == row - 1||cury == 0||cury == col - 1){
+                        tobefilled = false;
                     }
+                    if(curx + 1 <= row - 1 && mark[curx + 1][cury] == false && board[curx + 1][cury] == 'O'){
+                        xs.push(curx + 1);
+                        ys.push(cury);
+                        mark[curx + 1][cury] = true;
+                        minx = curx + 1 < minx ? curx + 1 : minx;
+                        miny = cury < miny ? cury: miny;
+                    }
+                    if(curx - 1 >= 0 && mark[curx - 1][cury] == false && board[curx - 1][cury] == 'O'){
+                        xs.push(curx - 1);
+                        ys.push(cury);
+                        mark[curx - 1][cury] = true;
+                        minx = curx - 1 < minx ? curx - 1 : minx;
+                        miny = cury < miny ? cury: miny;
+                    }
+                    if(cury + 1 <= col - 1 && mark[curx][cury + 1] == false && board[curx][cury + 1] == 'O'){
+                        xs.push(curx);
+                        ys.push(cury + 1);
+                        mark[curx][cury + 1] = true;
+                        minx = curx < minx ? curx : minx;
+                        miny = cury + 1 < miny ? cury + 1: miny;
+                    }
+                    if(cury - 1 >= 0 && mark[curx][cury - 1] == false && board[curx][cury - 1] == 'O'){
+                        xs.push(curx);
+                        ys.push(cury - 1);
+                        mark[curx][cury - 1] = true;
+                        minx = curx < minx ? curx : minx;
+                        miny = cury - 1 < miny ? cury - 1: miny;
+                    }
+                }
+                if(tobefilled == true && board[minx][miny] == 'O'){//why must add =='O'
+                    pts.add(new Point(minx,miny));
                 }
             }
         }
         for(int i = 0; i < pts.size(); i++){
             search(pts.get(i), board);
+            //System.out.println(pts.get(i).i + "," + pts.get(i).j);
         }
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
@@ -53,44 +94,43 @@ public class SurroundedRegion {
         }
     }
     public static void search(Point pt, char board[][]){
-        int x = pt.i;
-        int y = pt.j;
-        if(x >= board.length || y >= board[0].length){
-            return;
-        }
-        if(board[x][y] == 'O'){
-            search(new Point(x, y+1), board);
-            search(new Point(x + 1, y), board);
-        }
-        board[x][y] = 'X';
-    }
-    /**
-     * true if surrounded
-     */
-    public static boolean findMargin(int i, int j, char board[][], boolean mark[][]){
-        if(i >= board.length || j >= board[0].length){
-            return true;
-        }
-        mark[i][j] = true;
-        if(board[i][j] == 'X'){
-            return true;
-        }
-        else if(board[i][j] == 'O'){
-            if(i == 0 || j == 0 || i >= board.length - 1 || j >= board[0].length - 1){
-                return false;
+        int i = pt.i;
+        int j = pt.j;
+        Stack<Integer> xs = new Stack();
+        Stack<Integer> ys = new Stack();
+        xs.push(i);//=false
+        ys.push(j);
+        int row = board.length;
+        int col = board[0].length;
+        while(!xs.isEmpty()){
+            int curx = xs.pop();
+            int cury = ys.pop();
+            board[curx][cury] = 'X';
+            if(curx + 1 <= row - 1 && board[curx + 1][cury] == 'O'){
+                xs.push(curx + 1);
+                ys.push(cury);
+                board[curx + 1][cury] = 'X';
             }
-            else if(findMargin(i, j+1, board, mark) && findMargin(i + 1, j, board, mark) && findMargin(i - 1, j, board, mark)){
-                return true;
+            if(curx - 1 >= 0 && board[curx - 1][cury] == 'O'){
+                xs.push(curx - 1);
+                ys.push(cury);
+                board[curx - 1][cury] = 'X';
             }
-            else{
-                return false;
+            if(cury + 1 <= col - 1 && board[curx][cury + 1] == 'O'){
+                xs.push(curx);
+                ys.push(cury + 1);
+                board[curx][cury + 1] = 'X';
+            }
+            if(cury - 1 >= 0 && board[curx][cury - 1] == 'O'){
+                xs.push(curx);
+                ys.push(cury - 1);
+                board[curx][cury - 1] = 'X';
             }
         }
-        return false;
     }
 
     public static void main(String[] args) {
-        char[][] s = {"OOOOXX".toCharArray(),"OOOOOO".toCharArray(),"OXOXOO".toCharArray(),"OXOOXO".toCharArray(),"OXOXOO".toCharArray(),"OXOOOO".toCharArray()};
+        char[][] s = {"XOOXXXOXOO","XOXXXXXXXX","XXXXOXXXXX","XOXXXOXXXO","OXXXOXOXOX","XXOXXOOXXX","OXXOOXOXXO","OXXXXXOXXX","XOOXXOXXOO","XXXOOXOXXO"};
         solve(s);
     }
 }
