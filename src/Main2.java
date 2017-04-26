@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Created by jack on 2017/4/8.
  */
-public class Main {
+public class Main2 {
 
     public static int calc(int robs, int t, int jobs, int q, Map<Integer, Integer> timeMap){
         int newRobs = timeMap.getOrDefault(t, 0) * 2;//new
