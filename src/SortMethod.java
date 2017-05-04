@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 /**
  * Created by jack on 2017/4/20.
  */
@@ -22,7 +24,7 @@ public class SortMethod {
         PrintResult(e, "希尔");
         mergSort(f, 0, f.length - 1);
         PrintResult(f, "归并");
-        mergSort(g, 0, f.length - 1);
+        heepSort(g);
         PrintResult(g, "堆排");
     }
     public static void PrintResult(int arr[], String name){
@@ -123,7 +125,7 @@ public class SortMethod {
     }
     public static void heepSort(int arr[]){
         createHeep(arr);
-        for(int i = arr.length - 1; i > 0 ; i++){
+        for(int i = arr.length - 1; i > 0 ; i--){
             Swap(arr, 0, i);
             reHeep(arr, 0, i - 1);
         }
@@ -134,32 +136,32 @@ public class SortMethod {
      * @param arr
      */
     public static void createHeep(int arr[]){
-        for(int i = (arr.length - 1) / 2; i > 0; i--){
-            if(i >> 2 + 2 < arr.length){
-                if(arr[i] < arr[i >> 2 + 1]){
-                    Swap(arr, i, i >> 2 + 1);
+        for(int i = (arr.length - 2) >> 1; i > 0; i--){
+            if((i << 1) + 2 < arr.length - 1){
+                if(arr[i] < arr[(i << 1) + 1]){
+                    Swap(arr, i, i >> 1 + 1);
                 }
             }
             else{
-                if(arr[i] < arr[i >> 2 + 1] || arr[i] < arr[i >> 2 + 2]){
-                    int maxIndex = arr[i >> 2 + 1] < arr[i >> 2 + 2] ? i >> 2 + 1 : i >> 2 + 2;
+                if(arr[i] < arr[(i << 1) + 1] || arr[i] < arr[(i << 1) + 2]){
+                    int maxIndex = arr[(i << 1) + 1] < arr[(i << 1) + 2] ? (i << 1) + 2 : (i << 1) + 1;
                     Swap(arr, i, maxIndex);
                 }
             }
         }
     }
-    public static void reHeep(int arr[], int node, int end){
-        if(node << 2 + 2 <= end){
-            if(arr[node] < arr[node << 2 + 2] || arr[node] < arr[node << 2 + 1]){
-                int maxIndex = arr[node << 2 + 2] < arr[node << 2 + 1] ? node << 2 + 1 : node << 2 + 2;
+    public static void reHeep(int arr[], int node, int end){//reheep是从堆顶往堆底调，node表示当前要调的节点（与其子节点）
+        if((node << 1) + 2 <= end){
+            if(arr[node] < arr[(node << 1) + 2] || arr[node] < arr[(node << 1) + 1]){
+                int maxIndex = arr[(node << 1) + 2] < arr[(node << 1) + 1] ? (node << 1) + 1 : (node << 1) + 2;
                 Swap(arr, node, maxIndex);
                 reHeep(arr, maxIndex, end);
             }
         }
-        else if(node << 2 + 1 <= end){
-            if(arr[node] < arr[node << 2 + 1]){
-                Swap(arr, node, node << 2 + 1);
-                reHeep(arr, node << 2 + 1, end);
+        else if((node << 1) + 1 <= end){
+            if(arr[node] < arr[(node << 1) + 1]){
+                Swap(arr, node, (node << 1) + 1);
+                reHeep(arr, (node << 1) + 1, end);
             }
         }
     }
@@ -177,7 +179,7 @@ public class SortMethod {
         int low = start, high = end;
         int pivot = arr[index];
         Swap(arr, index, end);
-        while(low < high){//左边取的是<=，右边取的是>
+        while(low < high){//左边取的是<=，右边取的是>。也就是说左边全是小于等于pivot，右边全是大于pivot
             while(arr[low] <= pivot && low < high){
                 low++;
             }

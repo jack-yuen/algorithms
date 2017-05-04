@@ -33,6 +33,9 @@ public class PatternMatch {
                 s = match;
                 p = lastStarIndex + 1;
             }
+            else{//要么p超了并且还没有星号可以回退，要么没超&字符不匹配&没有星号可以回退
+                return false;
+            }
         }
         while(p < patternSeq.length){
             if(patternSeq[p] != '*'){
