@@ -1,5 +1,8 @@
+import java.util.HashMap;
+
 /**
  * Created by jack on 2017/5/2.
+ * 与运算和移位运算用的是补码
  */
 public class testFinal {
     int t;
@@ -17,6 +20,9 @@ public class testFinal {
         System.out.println(arr[1]);
         System.out.println(arr[2]);
         //结果说明这两个都可以对arr改变
+        System.out.println(-8 << 1);
+        System.out.println(2 << 1);
+        System.out.println((-7) & 3);
     }
     public static void testArr(int[] arr){
         arr[0] = 7;
