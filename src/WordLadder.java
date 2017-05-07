@@ -16,105 +16,78 @@ public class WordLadder {
     }
     public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Set<String> wordSet = new HashSet<String>();
-        for(int i = 0; i < wordList.size(); i++){
-            wordSet.add(wordList.get(i));
-        }
+        wordSet.addAll(wordList);
         HashMap<String, List<String>> neighborList = new HashMap<String, List<String>>();
+        findNeiOfStr(beginWord, neighborList, wordSet);
         calcWordDist(neighborList, wordSet);
 
-        //把wordList中的字符串加入HashMap，计算每个与他们两两之间的距离
-        //整体dijkstra
-        //for(int i = 0; i < wordList.size(); i++){
-        //    addNeighborhood(neighborList, beginWord, wordList.get(i));
-        //    for(int j = i; j < wordList.size(); j++){
-        //        addNeighborhood(neighborList, wordList.get(i), wordList.get(j));
-        //    }
-        // }
-        int dist = 1;
-        List<String> curNeigh = new ArrayList<String>();
-        HashSet<String> calcedMap = new HashSet<String>();
-        Stack<String> strStack = new Stack<String>();
-        Stack<String> curStack = new Stack<String>();
-        strStack.push(beginWord);
-        while(!strStack.isEmpty()){
-            curNeigh = neighborList.get(strStack.pop());
-            for(int j = 0; j < curNeigh.size(); j++){
-                if(curNeigh.get(j).equals(endWord)){
-                    dist++;
-                    return dist;
+        int dist = 0;
+        Set<String> reached = new HashSet<String>();
+        Stack<String> lastReached = new Stack();
+        Stack<String> curReached = new Stack();
+        lastReached.push(beginWord);
+        boolean useCur = false;
+        while(useCur ? !curReached.isEmpty() : !lastReached.isEmpty()){
+            String curPoped = useCur ? curReached.pop() : lastReached.pop();
+            List<String> curList = neighborList.get(curPoped);
+            if(curList == null || curList.isEmpty()){
+                continue;
+            }
+            Iterator<String> it = curList.iterator();
+            while(it != null && it.hasNext()){
+                String curNei = it.next();
+                if(curNei.equals(endWord)){
+                    return dist + 1;
                 }
-                if(!calcedMap.contains(curNeigh.get(j))){
-                    curStack.push(curNeigh.get(j));
+                if(!reached.contains(curNei)){
+                    if(useCur){
+                        lastReached.add(curNei);
+                    }
+                    else{
+                        curReached.add(curNei);
+                    }
                 }
             }
-            if(strStack.isEmpty()){
-                while(!curStack.isEmpty()){
-                    strStack.push(curStack.pop());
-                }
-                dist++;//为空表示一轮走完
+            if(useCur && curReached.isEmpty()){
+                useCur = false;
+                dist++;
+            }
+            else if(!useCur && lastReached.isEmpty()){
+                useCur = true;
+                dist++;
             }
         }
         return 0;
-    }
-
-    public static void addNeighborhood(HashMap<String, List<String>> neighborList, String str1, String str2){
-        if(neighborTwoWords(str1, str2) == true){
-            if(neighborList.containsKey(str1)){
-                neighborList.get(str1).add(str2);
-            }
-            else{
-                List<String> strList = new ArrayList<String>();
-                strList.add(str2);
-                neighborList.put(str1, strList);
-            }
-            if(neighborList.containsKey(str2)){
-                neighborList.get(str2).add(str1);
-            }
-            else{
-                List<String> strList = new ArrayList<String>();
-                strList.add(str1);
-                neighborList.put(str2, strList);
-            }
-        }
     }
     public static void calcWordDist(HashMap<String, List<String>> neighborList, Set<String>wordSet){
         Iterator<String> it = wordSet.iterator();
         while(it.hasNext()){
             String str = it.next();
-            char[] chars = str.toCharArray();
-            for(int i = 0; i < chars.length; i++){
-                for(char c = 'a'; c <= 'z'; c++){
-                    chars[i] = c;//改变某一位,26*长度次
-                    String changeStr = new String(chars);
-                    if(wordSet.contains(changeStr)){
-                        if(neighborList.containsKey(str)){
-                            neighborList.get(str).add(changeStr);
-                        }
-                        else{
-                            List<String> strList = new ArrayList<String>();
-                            strList.add(changeStr);
-                            neighborList.put(str, strList);
-                        }
+            findNeiOfStr(str, neighborList, wordSet);
+        }
+    }
+    public static void findNeiOfStr(String str, HashMap<String, List<String>> neighborList, Set<String> wordSet){
+        char[] chars = str.toCharArray();
+        for(int i = 0; i < chars.length; i++){
+            chars = str.toCharArray();
+            char oldChar = chars[i];
+            for(char c = 'a'; c <= 'z'; c++){
+                if(c == oldChar){
+                    continue;
+                }
+                chars[i] = c;//改变某一位,26*长度次
+                String changeStr = new String(chars);
+                if(wordSet.contains(changeStr)){
+                    if(neighborList.containsKey(str)){
+                        neighborList.get(str).add(changeStr);
+                    }
+                    else{
+                        List<String> strList = new ArrayList<String>();
+                        strList.add(changeStr);
+                        neighborList.put(str, strList);
                     }
                 }
             }
         }
-    }
-    /**
-     *看两个字符串是不是邻居
-     */
-    public static boolean neighborTwoWords(String str1, String str2){
-        boolean found = false;
-        for(int i = 0; i < str1.length(); i++){
-            if(str1.charAt(i) != str2.charAt(i)){
-                if(found == true){
-                    return false;
-                }
-                else{
-                    found = true;
-                }
-            }
-        }
-        return found;
     }
 }
