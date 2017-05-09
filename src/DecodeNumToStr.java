@@ -1,7 +1,10 @@
+import java.util.HashMap;
+
 /**
  * Created by jack on 2017/5/7.
  */
 public class DecodeNumToStr {
+    private int[] s;
     public static void main(String[] args) {
         System.out.println(numDecodings("12120"));
     }
