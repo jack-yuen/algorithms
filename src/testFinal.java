@@ -14,15 +14,28 @@ public class testFinal {
     }
 
     public static void main(String[] args) {
-        int[] arr = {3,5,8};
-        testArr(arr);
-        testArr2(arr);
-        System.out.println(arr[1]);
-        System.out.println(arr[2]);
-        //结果说明这两个都可以对arr改变
-        System.out.println(-8 << 1);
-        System.out.println(2 << 1);
-        System.out.println((-7) & 3);
+        int ts = 1;
+        double max= 0;
+        int cur = 0;
+        while(ts < 100000){
+            double tmp = (int)ts / (int)Math.sqrt(ts) - (int)Math.sqrt(ts);
+            if(max < tmp) {
+                cur = ts;
+                max = tmp;
+            }
+            ts++;
+        }
+        System.out.print(cur);
+
+//        int[] arr = {3,5,8};
+//        testArr(arr);
+//        testArr2(arr);
+//        System.out.println(arr[1]);
+//        System.out.println(arr[2]);
+//        //结果说明这两个都可以对arr改变
+//        System.out.println(-8 << 1);
+//        System.out.println(2 << 1);
+//        System.out.println((-7) & 3);
     }
     public static void testArr(int[] arr){
         arr[0] = 7;
