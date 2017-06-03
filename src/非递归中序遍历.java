@@ -1,23 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
+import baseClass.BinaryTreeNode;
 /**
  * Definition for a binary tree node.
- * public class TreeNode {
+ * public class BinaryTreeNode {
  *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
+ *     BinaryTreeNode left;
+ *     BinaryTreeNode right;
+ *     BinaryTreeNode(int x) { val = x; }
  * }
  */
 public class 非递归中序遍历 {
     public static void main(String[] argv){
-        TreeNode root = new TreeNode(1);
+        BinaryTreeNode root = new BinaryTreeNode(1);
         root.left = null;
-        TreeNode node2 = new TreeNode(2);
+        BinaryTreeNode node2 = new BinaryTreeNode(2);
         root.right = node2;
-        TreeNode node3 = new TreeNode(3);
+        BinaryTreeNode node3 = new BinaryTreeNode(3);
         node2.left = node3;
         node2.right = null;
         List<Integer> ss = inorderTraversal(root);
@@ -25,35 +25,20 @@ public class 非递归中序遍历 {
             System.out.println(ss.get(i));
         }
     }
-    public static List<Integer> inorderTraversal(TreeNode root) {
+    public static List<Integer> inorderTraversal(BinaryTreeNode root) {
         List<Integer> results = new ArrayList<Integer>();
-        if(root == null){
-            return results;
-        }
-        Stack s = new Stack();
-        s.push(root);
-        boolean lEmpty = false;//用来判定是不是左子树遍历完了才跳出的，如果是，那么栈顶的就不用继续判断左子树了
-        while(s.empty() == false){
-            TreeNode topNode = (TreeNode)(s.peek());
-            if(topNode.left != null && lEmpty == false){
-                s.push(topNode.left);
+        Stack<BinaryTreeNode> s = new Stack();
+        while(root != null || !s.isEmpty()){//初始节点不为空或者栈不空时继续
+            while(root != null){
+                s.push(root);
+                root = root.left;
             }
-            else{
-                topNode = (TreeNode)(s.pop());
-                results.add(topNode.val);
-                lEmpty = true;
-                if(topNode.right != null){
-                    s.push(topNode.right);
-                    lEmpty = false;
-                }
+            if(!s.isEmpty()){
+                BinaryTreeNode cur = s.pop();
+                results.add(cur.val);
+                root = cur.right;//给出右边一个初始节点（当前出节点的右子树），继续上面的遍历
             }
         }
         return results;
     }
 }
- class TreeNode {
-      int val;
-      TreeNode left;
-      TreeNode right;
-      TreeNode(int x) { val = x; }
- }

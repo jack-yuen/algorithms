@@ -106,7 +106,7 @@ public class SortMethod {
         int index = 0;
         int j = mid + 1;
         for(int i = start; i <= mid; i++){//把前一半的遍历完
-            while(j <= end && arr[j] < arr[i]){
+            while(j <= end && arr[j] < arr[i]){//这里先加的是右边的。也可以先判断左边的加
                 mergArr[index] = arr[j];
                 j++;
                 index++;

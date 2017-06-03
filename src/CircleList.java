@@ -1,17 +1,10 @@
+import baseClass.ListNode;
+
 /**
  * Created by jack on 2017/5/6.
  * 一个链表中包含环，请找出该链表的环的入口结点。未完成
  */
 public class CircleList {
- class ListNode {
-    int val;
-    ListNode next = null;
-
-    ListNode(int val) {
-        this.val = val;
-    }
-}
-
     public class Solution {
         public ListNode EntryNodeOfLoop(ListNode pHead)
         {
