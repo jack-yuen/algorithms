@@ -1,6 +1,7 @@
 /**
  * Created by jack on 2017/6/2.
  * 把搜索二叉树转换成为一个排序的双向链表，不新建节点。这里用的非递归中序遍历。存一个last节点
+ * 非递归中序的while循环的条件是：last节点不为空或者stack不为空
  */
 import java.util.Stack;
 import baseClass.BinaryTreeNode;

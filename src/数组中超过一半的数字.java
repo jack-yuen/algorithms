@@ -2,6 +2,8 @@ import com.sun.org.apache.xml.internal.dtm.ref.sax2dtm.SAX2DTM2;
 
 /**
  * Created by jack on 2017/6/3.
+ * 使用归并排序的思想
+ * 另外一种更简洁的方法：前到后计数，相同+1，相异-1，为0换数
  */
 public class 数组中超过一半的数字 {
     public static void main(String[] args){
