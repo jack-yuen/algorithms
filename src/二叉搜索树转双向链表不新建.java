@@ -3,7 +3,8 @@
  * 把搜索二叉树转换成为一个排序的双向链表，不新建节点。这里用的非递归中序遍历。存一个last节点
  * 非递归中序的while循环的条件是：last节点不为空或者stack不为空
  */
-import java.util.Stack;
+import java.util.*;
+
 import baseClass.BinaryTreeNode;
 public class 二叉搜索树转双向链表不新建 {
     public static void main(String[] args){
@@ -24,6 +25,20 @@ public class 二叉搜索树转双向链表不新建 {
         while(result != null){
             System.out.print((result.left==null?"()":"("+result.left.val+")") + result.val + "" + (result.right==null?"()":"("+result.right.val+")") + "->");
             result = result.right;
+        }
+        System.out.println();
+        TreeMap<Integer, Integer> mp = new TreeMap<Integer, Integer>();
+        mp.put(1,1);
+        mp.put(3,5);
+        mp.put(2, 7);
+        mp.put(0,4);
+        while(true){
+            Map.Entry<Integer, Integer> t = mp.pollFirstEntry();
+            if(t == null){
+                break;
+            }
+            Integer s = t.getKey();
+            System.out.println(s);
         }
     }
     public static BinaryTreeNode solve(BinaryTreeNode node){
